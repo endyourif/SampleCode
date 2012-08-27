@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<div id="items">
+     <div class="item">
+          <h1>Item Title 1</h1>
+          <h2>Available in: <span id="item_1"></span><span id="item_done_1">Ready!</span></h2>
+     </div>
+     <div class="item">
+          <h1>Item Title 2</h1>
+          <h2>Available in: <span id="item_2"></span><span id="item_done_2">Ready!</span></h2>
+     </div>
+     <div class="item">
+          <h1>Item Title 3</h1>
+          <h2>Available in: <span id="item_3"></span><span id="item_done_3">Ready!</span></h2>
+     </div>
+</div>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
+<script>
+   var counters = new Array();
+   var currentTime = new Date();
+   currentTime = currentTime.getTime();  // get the current time in milliseconds
+   console.log(currentTime);
+
+   var counter_1 = new Object();
+   counter_1.time = currentTime;
+   counter_1.reward_time = 10;
+   counter_1.finished = '#item_done_1';
+   counter_1.id = '#item_1';
+   AddCounter(counter_1); 
+
+   var counter_2 = new Object();
+   counter_2.time = currentTime;
+   counter_2.reward_time = 1200; 
+   counter_2.finished = '#item_done_2';
+   counter_2.id = '#item_2';
+   AddCounter(counter_2); 
+
+   var counter_3 = new Object();
+   counter_3.time = currentTime;
+   counter_3.reward_time = 1800; 
+   counter_3.finished = '#item_done_3';
+   counter_3.id = '#item_3';
+   AddCounter(counter_3);
+ 
+function AddCounter(counter) {
+    counter_found = false;
+    for (var x = 0; x < counters.length; x++) {
+        if (counters[x].id == counter.id) {
+            counter_found = true;
+            break;
+        }
+    }
+    if (!counter_found) {
+        counters[counters.length] = counter;
+    }
+}
+
+setInterval(UpdateCounters, 1000);
+
+function UpdateCounters() {
+    currentTime++;
+
+    for (var x = 0; x < counters.length; x++) {
+        var counter = counters[x];
+        var time_left = counter.reward_time - (currentTime - counter.time);
+        var message = time_left + ' second';
+        if (time_left != 1) {
+            message += 's';
+        }
+        if (time_left < 0) {
+            $(counter.finished).show();
+            $(counter.id).remove();
+        } else {
+            $(counter.finished).hide();
+            $(counter.id).text(message);
+        }
+    }
+}
+</script>
+
+</body>
+</html>
